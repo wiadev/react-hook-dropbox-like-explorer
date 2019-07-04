@@ -8,6 +8,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 const headRows = [
   { id: 'name', label: 'Name' },
+  { id: 'type', label: 'Type' },
 ];
 
 function EnhancedTableHead(props) {

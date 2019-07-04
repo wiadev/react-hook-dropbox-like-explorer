@@ -177,6 +177,7 @@ export default function EnhancedTable(props) {
                       <TableCell component="th" id={labelId} scope="row" padding="none" onClick={event => handleClick(event, row)}>
                         {row.name}
                       </TableCell>
+                      <TableCell>{row.type}</TableCell>
                     </TableRow>
                   );
                 })}
