@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/react-hook-dropbox-like-explorer/precache-manifest.5224409e734b7f999ac431354f4f024a.js"
+  "/react-hook-dropbox-like-explorer/precache-manifest.4b5d772826ebdcf15d8ed7f22ce33035.js"
 );
 
 self.addEventListener('message', (event) => {
