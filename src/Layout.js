@@ -45,7 +45,7 @@ export default () => {
     return !rows.find(row => (row.name === data.name && row.type === data.type))
   }
 
-  const updateRow = (data) => {
+  const addNewRow = (data) => {
     if (filepath.length === 0) {
       if (validateNewData(rows, data)) {
         setRows([...rows, data]);
@@ -62,6 +62,37 @@ export default () => {
       })
       if (temp && validateNewData(temp, data)) {
         temp.push(data);
+      }
+      setRows(newRows);
+    }
+  }
+
+  const replaceData = (arr, data) => {
+    const index = arr.findIndex(c => c.name === data.oldName)
+    const newData = {...data};
+    delete newData.oldName;
+    arr.splice(index, 1, newData)
+  }
+
+  const updateRow = (data) => {
+    if (filepath.length === 0) {
+      if (validateNewData(rows, data)) {
+        const arr = [...rows];
+        replaceData(arr, data);
+        setRows(arr);
+      }
+    } else {
+      let newRows = [...rows];
+      let temp = newRows;
+      filepath.map((name) => {
+        const data = temp.find(c => c.name === name);
+        if (data) {
+          temp = data.child;
+        }
+        return name;
+      })
+      if (temp && validateNewData(temp, data)) {
+        replaceData(temp, data);
       }
       setRows(newRows);
     }
@@ -105,11 +136,12 @@ export default () => {
           setFilepath={setFilepath}
           filepath={filepath}
           removeSelectedItems={handleRemoveSelectedItems}
+          updateRow={updateRow}
         />
       </FilesWrapper>
       <ActionsWrapper>
         <Actions
-          updateRow={updateRow}
+          updateRow={addNewRow}
         />
       </ActionsWrapper>
     </Wrapper>

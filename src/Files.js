@@ -9,6 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import FileToolbar from './FileToolbar';
 import EnhancedTableHead from './EnhancedTableHead';
+import Button from '@material-ui/core/Button';
+import Modal from './Modal';
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -51,13 +53,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EnhancedTable(props) {
-  const { filepath, setFilepath, removeSelectedItems, defaultData } = props;
+  const { filepath, setFilepath, removeSelectedItems, defaultData, updateRow } = props;
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [rows, setRows] = React.useState(defaultData);
-
+  const [open, setOpen] = React.useState(false);
+  const [newData, setNewData] = React.useState({
+    type: 'file',
+    name: '',
+  });
+  
   React.useEffect(() => {
     updateFilepath(filepath);
   })
@@ -127,6 +134,27 @@ export default function EnhancedTable(props) {
     setFilepath(pathArr);
   }
 
+  function handleClose() {
+    setOpen(false);
+  }
+
+  function handleRename(row) {
+    setNewData({
+      ...row,
+      oldName: row.name
+    });
+    setOpen(true);
+  }
+
+  function handleSave(row) {
+    if (!row.name) {
+      return;
+    }
+
+    updateRow(row);
+    handleClose();
+  }
+
   const isSelected = name => selected.indexOf(name) !== -1;
 
   return (
@@ -178,6 +206,9 @@ export default function EnhancedTable(props) {
                         {row.name}
                       </TableCell>
                       <TableCell>{row.type}</TableCell>
+                      <TableCell>
+                        <Button variant="contained" color="primary" onClick={() => handleRename(row)}>Rename</Button>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -185,6 +216,12 @@ export default function EnhancedTable(props) {
           </Table>
         </div>
       </Paper>
+      <Modal
+        open={open}
+        handleClose={handleClose}
+        handleSave={handleSave}
+        row={newData}
+      />
     </div>
   );
 }
@@ -194,4 +231,5 @@ EnhancedTable.propTypes = {
   setFilepath: PropTypes.func.isRequired,
   removeSelectedItems: PropTypes.func.isRequired,
   defaultData: PropTypes.array.isRequired,
+  updateRow: PropTypes.func.isRequired,
 }
