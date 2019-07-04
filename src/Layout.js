@@ -17,6 +17,8 @@ const FilesWrapper = styled.div`
 
 const ActionsWrapper = styled.div`
   width: 300px;
+  padding: 0 20px;
+  box-sizing: border-box;
 `
 const defaultRows = [
   {
